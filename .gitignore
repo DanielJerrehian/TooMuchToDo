@@ -1,0 +1,13 @@
+backend/venv
+.env
+firebase_admin_credentials.json
+
+backend/htmlcov
+
+backend/*.pem
+backend/*.ppk
+
+backend/.coverage
+
+backend/*.pyc 
+backend/__pycache__
