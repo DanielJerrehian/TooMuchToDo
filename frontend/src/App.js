@@ -10,6 +10,7 @@ import Login from './components/login/Login';
 import Register from './components/register/Register';
 import ToDo from './features/toDo/components/ToDo';
 import Profile from './features/user/components/Profile';
+import PageNotFound from './components/notFound/PageNotFound';
 
 function App() {
 
@@ -25,6 +26,7 @@ function App() {
                         <Route path='/home' element={<ToDo />} />
                         <Route path='/profile' element={<Profile />} />
                     </Route>
+                    <Route path='*' element={<PageNotFound />} />
                 </Route>
             </Routes>
         </Container>
