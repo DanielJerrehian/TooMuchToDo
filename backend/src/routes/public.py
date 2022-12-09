@@ -1,6 +1,6 @@
-from flask import Blueprint, request, make_response
+from flask import Blueprint
 
-from ..logic.site_statistics import SiteStatistics
+from ..logic.site_statistics.site_statistics import SiteStatistics
 
 
 public = Blueprint("public", __name__)
@@ -12,11 +12,11 @@ def index():
 @public.get("/site-statistics")
 def get_site_statistics():
     stats = SiteStatistics()
-    stats.get_total_users()
-    stats.get_total_to_dos()
-    stats.get_total_completed_to_dos()
+    total_users = stats.get_total_users()
+    total_to_dos = stats.get_total_to_dos()
+    total_completed_to_dos = stats.get_total_completed_to_dos()
     return {"stats": {
-        "totalUsers": stats.total_users,
-        "totalToDos": stats.total_to_dos,
-        "totalCompletedToDos": stats.total_completed_to_dos
+        "totalUsers": total_users,
+        "totalToDos": total_to_dos,
+        "totalCompletedToDos": total_completed_to_dos
     }}, 200

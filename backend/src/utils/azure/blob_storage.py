@@ -3,55 +3,33 @@ import os
 
 
 class BlobStorage:
-    def __init__(self, storage_container_name:str=None, blob_name:str=None):
-        self.storage_container_name = storage_container_name
+    def __init__(self, blob_name: str = None, storage_container_name: str = "pictures/profilePictures"):
         self.blob_name = blob_name
-        self.blob_service_client = None
-        self.blob_client = None
-        self.storage_url = os.environ.get("BLOB_STORAGE_URL")
-        self.storage_key = os.environ.get("BLOB_STORAGE_KEY")
-        self.connection_string = os.environ.get("BLOB_CONNECTION_STRING")
-        self.storage_container = None
-            
-    def get_blob_client(self):
-        self.blob_client = BlobClient.from_connection_string(conn_str=self.connection_string, container_name=self.storage_container_name, blob_name=self.blob_name)        
-            
-    def get_blob_service_client(self):
-        self.blob_service_client = BlobServiceClient(account_url=self.storage_url, credential=self.storage_key)
-                
-    def get_storage_container_client(self):
-        self.storage_container = self.blob_service_client.get_container_client(self.storage_container_name)
+        self.blob_service_client = BlobServiceClient(account_url=os.environ.get("BLOB_STORAGE_URL"), credential=os.environ.get("BLOB_STORAGE_KEY"))
+        self.storage_container_client = self.blob_service_client.get_container_client(storage_container_name)          
+        if self.blob_name:
+            self.blob_client = BlobClient.from_connection_string(conn_str=os.environ.get("BLOB_CONNECTION_STRING"), blob_name=self.blob_name, container_name=storage_container_name)
 
-    def close_connection(self):
-        self.storage_container.close()
-        self.blob_service_client.close()
-        self.blob_client.close()
-
+    def close_connection(self, client: object) -> None:
+        client.close()
+        
 
 class DeleteBlob(BlobStorage):
-    def __init__(self, storage_container_name:str=None, blob_name:str=None):
-        super().__init__(storage_container_name=storage_container_name, blob_name=blob_name)
-        self.blob_exists = None
-            
-    def check_if_blob_exists(self):
-        self.blob_exists = self.blob_client.exists()
+    def __init__(self, blob_name: str, storage_container_name: str = "pictures/profilePictures"):
+        super().__init__(blob_name=blob_name, storage_container_name=storage_container_name)
                 
-    def delete_blob(self):
-        self.storage_container.delete_blob(blob=self.blob_name, delete_snapshots="include")
+    def delete_blob(self) -> None:
+        if self.blob_client.exists():
+            self.storage_container_client.delete_blob(blob=self.blob_name, delete_snapshots="include")
 
 
 class UploadBlob(BlobStorage):
-    def __init__(self, storage_container_name:str=None, upload_data:object=None, blob_name:str=None):
-        super().__init__(storage_container_name=storage_container_name, blob_name=blob_name)
-        self.upload_data = upload_data
-        self.blob_name = blob_name
-        self.blob_file_link = None
-            
-    def upload_data_to_container(self):
-        self.storage_container.upload_blob(name=self.blob_name, data=self.upload_data, overwrite=True)
-        
-    def get_blob_file_link(self):
-        self.blob_file_link = f"{self.blob_service_client.url}{self.storage_container_name}/{self.blob_name}"
+    def __init__(self):
+        super().__init__()
+  
+    def upload_blob(self, blob_name: str, data: object, storage_container_name: str = "pictures/profilePictures") -> str:
+        self.storage_container_client.upload_blob(name=blob_name, data=data, overwrite=True)
+        return  f"{self.blob_service_client.url}{storage_container_name}/{blob_name}"
 
 
 

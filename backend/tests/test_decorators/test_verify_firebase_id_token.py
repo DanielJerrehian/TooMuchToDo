@@ -14,11 +14,11 @@ class TestVerifyFirebaseIdToken(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def test_expired_id_token_error(self):
-        self.api.add_expired_firebase_token()
-        response = self.api.put("/to-dos/update", json={"test": True})
-        self.assertEqual(response.json["message"], "Token expired")
-        self.assertEqual(response.status_code, 403)
+    # def test_expired_id_token_error(self):
+    #     self.api.add_expired_firebase_token()
+    #     response = self.api.put("/to-dos/update", json={"test": True})
+    #     self.assertEqual(response.json["message"], "Token expired")
+    #     self.assertEqual(response.status_code, 403)
 
     def test_invalid_id_token_error(self):
         self.api.add_fake_firebase_token()

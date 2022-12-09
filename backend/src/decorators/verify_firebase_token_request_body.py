@@ -3,7 +3,7 @@ from functools import wraps
 from firebase_admin.auth import verify_id_token, ExpiredIdTokenError
 
 
-def verify_firebase_id_token(f):
+def verify_firebase_token_request_body(f):
     @wraps(f)
     def wrap(*args,**kwargs):
         if not request.headers.get("Authorization"):
@@ -12,6 +12,8 @@ def verify_firebase_id_token(f):
             id_token = request.headers["Authorization"]
             user = verify_id_token(id_token=id_token)
             request.user = user
+            if request.user["uid"] != request.json["firebaseUid"]:
+                return {"message": "Forbidden"}, 403
         except ExpiredIdTokenError:
             return {"message": "Token expired"}, 403
         except:

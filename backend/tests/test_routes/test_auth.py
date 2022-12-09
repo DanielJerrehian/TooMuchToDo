@@ -15,9 +15,7 @@ class TestRegister(unittest.TestCase):
     def tearDown(self):
         with self.api.app.app_context():
             auth = firebase_auth.sign_in_with_email_and_password(email=self.new_user["email"], password=self.new_user["password"])
-            delete = DeleteFirebaseAuthUser(user_id_token=auth["idToken"])
-            delete.run_request()
-            delete.convert_response_to_json()
+            DeleteFirebaseAuthUser().delete(user_id_token=auth["idToken"])
             user = User.query.filter(User.email == self.new_user["email"]).first()
             if user:
                 db.session.delete(user)
@@ -25,6 +23,9 @@ class TestRegister(unittest.TestCase):
 
     def test_register_201(self):
         with self.api.app.app_context():
+            user = User.query.filter(User.email == self.new_user["email"]).first()
+            if user:
+                db.session.delete(user)
             response = self.api.post("/register", json=self.new_user)
             self.assertEqual(response.json["message"], "User successfully created")
             self.assertEqual(response.status_code, 201)
@@ -147,9 +148,7 @@ class TestResetPassword(unittest.TestCase):
     def tearDown(self):
         with self.api.app.app_context():
             auth = firebase_auth.sign_in_with_email_and_password(email=self.new_user["email"], password=self.new_user["password"])
-            delete = DeleteFirebaseAuthUser(user_id_token=auth["idToken"])
-            delete.run_request()
-            delete.convert_response_to_json()
+            DeleteFirebaseAuthUser().delete(user_id_token=auth["idToken"])
             user = User.query.filter(User.email == self.new_user["email"]).first()
             if user:
                 db.session.delete(user)

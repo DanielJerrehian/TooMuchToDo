@@ -1,48 +1,35 @@
 from flask import Blueprint, request
 
 from ..logic.convert_query_string_filter_by_to_dict import ConvertQueryStringFilterByToDict
-from ..logic.to_dos import GetToDos, PostToDo, UpdateToDo
+from ..models.models import ToDo
+from ..logic.to_do.order_by_to_dos import OrderByToDos
+from ..utils.sql.database_crud import DatabaseCrud
+from ..logic.to_dos import PostToDo, UpdateToDo
 from ..models.marshmallow.schemas.ma_schemas import ToDoSchema
-from ..decorators.verify_firebase_id_token import verify_firebase_id_token
+from ..decorators.verify_firebase_token_path_parameter import verify_firebase_token_path_parameter
+from ..decorators.verify_firebase_token_request_body import verify_firebase_token_request_body
 
 
 to_do = Blueprint("to_do", __name__)
 
 @to_do.post("/to-dos/new")
-@verify_firebase_id_token
+@verify_firebase_token_request_body
 def post_new_to_do():
     data = request.json
-    if request.user["uid"] == data["firebaseUid"]:
-        to_do = PostToDo(user_firebase_uid=data["firebaseUid"], task=data["task"])
-        to_do.add_to_do()
-        to_do.commit()
-        return {"message": "To-Do created"}, 201
+    PostToDo().add(user_firebase_uid=data["firebaseUid"], task=data["task"])
+    return {"message": "To-Do created"}, 201
 
 @to_do.get("/to-dos/<string:user_firebase_uid>")
-@verify_firebase_id_token
+@verify_firebase_token_path_parameter
 def get_to_dos(user_firebase_uid):
-    if request.user["uid"] == user_firebase_uid:
-        convert = ConvertQueryStringFilterByToDict(
-            default_filters={"user_firebase_uid": user_firebase_uid}, 
-            query_string_filters=request.args.get("filterBy", None)
-        )
-        convert.add_default_filters()
-        convert.add_query_string_filters() 
-        to_dos = GetToDos(filters=convert.filters, order_by=request.args.get("orderBy", None))
-        to_dos.order_query()
-        to_dos.fetch_all()
-        return {"toDos": ToDoSchema(exclude=["user"]).dump(to_dos.result, many=True)}, 200
-    else:
-        return {"message": "Forbidden"}, 403
+    filters = ConvertQueryStringFilterByToDict(default_filters={"user_firebase_uid": user_firebase_uid}).add_query_string_filters(request.args.get("filterBy", {})) 
+    query = OrderByToDos().order_query(order_by=request.args.get("orderBy", None), query=ToDo.query.filter_by(**filters))
+    result = DatabaseCrud().fetch_all(query=query)
+    return {"toDos": ToDoSchema(exclude=["user"]).dump(result, many=True)}, 200
 
 @to_do.put("/to-dos/update")
-@verify_firebase_id_token
-def update_to_do():
+@verify_firebase_token_request_body
+def update():
     data = request.json
-    if request.user["uid"] == data["firebaseUid"]:
-        to_do = UpdateToDo(to_do_id=data["toDoId"], update_attributes=data["updateAttributes"])
-        to_do.update_to_do()
-        to_do.commit()
-        return {"message": "To-Do updated"}, 200
-    
-    
+    UpdateToDo().update(to_do_id=data["toDoId"], update_attributes=data.get("updateAttributes", {}))
+    return {"message": "To-Do updated"}, 200
