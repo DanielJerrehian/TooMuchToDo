@@ -5,7 +5,8 @@ from ..models.models import db, User
 from ..models.marshmallow.schemas.ma_schemas import UserSchema
 from ..utils.google.firebase import firebase_auth
 from ..auth.firebase_auth import RefreshFirebaseIdToken
-from ..logic.user import UpdateUserProfile
+from ..logic.user.update_user_profile import UpdateUserProfile
+from ..utils.google.firebase_auth_client import FirebaseSignInEmailPassword
 
 
 auth = Blueprint("auth", __name__)
@@ -31,16 +32,14 @@ def login():
     if not user:
         return {"message": "No user found with that E-Mail"}, 400
     try:
-        auth = firebase_auth.sign_in_with_email_and_password(email=data["email"], password=data["password"])
+        auth = FirebaseSignInEmailPassword().sign_in(email=data["email"], password=data["password"])
     except HTTPError:
         return {"message": "Password incorrect"}, 401
     firebase_user_account_info = firebase_auth.get_account_info(id_token=auth["idToken"])
     if firebase_user_account_info["users"][0]["emailVerified"] == False:
         return {"message": "Please verify your E-Mail via the link sent to your inbox before logging in (it may have landed in your spam folder)"}, 401
     if not user.email_verified:
-        update = UpdateUserProfile(user_firebase_id=user.firebase_uid)
-        update.update_profile(update_attributes={"email_verified": True})
-        update.commit()
+        UpdateUserProfile().update_profile(user_firebase_id=user.firebase_uid, mapped_data={"email_verified": True})
     response = make_response({"user": UserSchema(exclude=["todos"]).dump(user), "idToken": auth["idToken"]})
     if current_app.config.get("ENV") == "production":
         response.set_cookie(key="refreshToken", value=auth["refreshToken"], httponly=True, secure=True)
@@ -60,11 +59,9 @@ def refresh_access_token():
     if not user_refresh_token:
         return {"message": "No refresh token provided"}, 400
     refresh = RefreshFirebaseIdToken(user_refresh_token=user_refresh_token)
-    refresh.create_payload_body()
-    refresh.run_request()
-    refresh.convert_response_to_json()
-    refresh.get_user_object()
-    return {"user": UserSchema(exclude=["todos"]).dump(refresh.user_object), "idToken": refresh.response["id_token"]}, 200
+    response = refresh.fetch_new_id_token()
+    user = refresh.get_user_object(id_token=response["id_token"])
+    return {"user": UserSchema(exclude=["todos"]).dump(user), "idToken": response["id_token"]}, 200
 
 @auth.get("/reset-password/<string:email>")
 def reset_password(email):

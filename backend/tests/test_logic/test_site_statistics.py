@@ -2,7 +2,7 @@ import unittest
 
 from ..client import ApiClient
 from src.models.models import db, User, ToDo
-from src.logic.site_statistics import SiteStatistics
+from src.logic.site_statistics.site_statistics import SiteStatistics
 
 
 class TestSiteStatistics(unittest.TestCase):
@@ -30,18 +30,15 @@ class TestSiteStatistics(unittest.TestCase):
 
     def test_get_total_users(self):
         with self.api.app.app_context():
-            class_object = SiteStatistics()
-            class_object.get_total_users()
-            self.assertTrue(class_object.total_users)
+            total_users = SiteStatistics().get_total_users()
+            self.assertTrue(total_users)
 
     def test_get_total_to_dos(self):
         with self.api.app.app_context():
-            class_object = SiteStatistics()
-            class_object.get_total_to_dos()
-            self.assertTrue(class_object.total_to_dos)
+            total_to_dos = SiteStatistics().get_total_to_dos()
+            self.assertTrue(total_to_dos)
 
     def test_get_total_completed_todos(self):
         with self.api.app.app_context():
-            class_object = SiteStatistics()
-            class_object.get_total_completed_to_dos()
-            self.assertTrue(class_object.total_completed_to_dos)
+            total_completed_to_dos = SiteStatistics().get_total_completed_to_dos()
+            self.assertTrue(total_completed_to_dos)

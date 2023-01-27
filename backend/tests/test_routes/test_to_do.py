@@ -113,16 +113,10 @@ class TestUpdateToDo(unittest.TestCase):
                     db.session.delete(to_do)
                 db.session.commit()
 
-    def test_update_to_do_200(self):
+    def test_update_200(self):
         with self.api.app.app_context():
             response = self.api.put(f"/to-dos/update", json={"firebaseUid": self.user_firebase_uid, "toDoId": self.to_do_id, "updateAttributes": {"completed": True}})
             updated_to_do = ToDo.query.filter(ToDo.user_firebase_uid == self.user_firebase_uid, ToDo.task == "Unit Test 1").first()
             self.assertEqual(updated_to_do.completed, True)
             self.assertEqual(response.json["message"], "To-Do updated")
             self.assertEqual(response.status_code, 200)
-
-    def test_update_to_do_key_error(self):
-        try:
-            self.api.put(f"/to-dos/update", json={"firebaseUid": self.user_firebase_uid, "toDoId": self.to_do_id})
-        except:
-            self.assertRaises(KeyError)
