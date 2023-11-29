@@ -27,7 +27,6 @@ function ToDoForm() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log("Here")
 
         if (newToDo.task.trim() === '') {
             setValidationError(true);
