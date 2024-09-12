@@ -2,9 +2,9 @@ import axios from 'axios';
 
 import { refreshIdToken } from '../features/user/userSlice';
 
-// const baseURL = 'http://127.0.0.1:7140'
+const baseURL = 'http://127.0.0.1:7140'
 // const baseURL = 'http://54.74.182.174:7140/'
-const baseURL = 'https://api.toomuchtodo.app/'
+// const baseURL = 'https://api.toomuchtodo.app/'
 
 let store
 
@@ -36,9 +36,9 @@ axiosPrivate.interceptors.response.use(
     response => response,
     async function (error) {
         const previousRequest = error?.config;
-        if (error?.response?.status === 403 && error?.response?.data === {'message': 'Token expired'} && !previousRequest.sent) {
+        if (error?.response?.status === 403 && error?.response?.data == { 'message': 'Token expired' } && !previousRequest.sent) {
             previousRequest.sent = true;
-            store.dispatch(refreshIdToken()) 
+            store.dispatch(refreshIdToken())
             const user = store.getState().user;
             previousRequest.headers['Authorization'] = user?.user?.idToken;
             return previousRequest;

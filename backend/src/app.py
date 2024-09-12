@@ -24,7 +24,7 @@ def create_app(environment: str = "production"):
     db.init_app(app)
     ma.init_app(app)
     migrate.init_app(app, db, render_as_batch=True)
-    
+
     app.register_blueprint(blueprint=auth)
     app.register_blueprint(blueprint=to_do)
     app.register_blueprint(blueprint=user)
@@ -43,7 +43,7 @@ def configure_app(app: object = None, environment: str = "development"):
 
     app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY")
     app.config["CORS_HEADERS"] = "Content-Type"
-    app.config["CORS_ORIGINS"] = ["https://toomuchtodo.app", "http://toomuchtodo-frontend.s3-website-eu-west-1.amazonaws.com", "http://localhost:3000", "http://127.0.0.1:3000"]
+    app.config["CORS_ORIGINS"] = ["*"]
     app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get(f"DATABASE_URI_{environment.upper()}")
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     app.config["SESSION_COOKIE_SECURE"] = True

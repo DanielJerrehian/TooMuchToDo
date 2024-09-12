@@ -15,7 +15,7 @@ import PageNotFound from './components/notFound/PageNotFound';
 function App() {
 
     return (
-        <Container sx={{ marginBottom: 30 }}>
+        <Container sx={{ marginBottom: 20, flexGrow: 1 }}>
             <Routes>
                 <Route element={<PersistLogin />}>
                     <Route path='/' element={<LandingPage />} />

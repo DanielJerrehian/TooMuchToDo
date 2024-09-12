@@ -109,6 +109,7 @@ export const userSlice = createSlice({
             }
         },
         setPersistLogin: (state, action) => {
+            console.log("here")
             localStorage.setItem('persistLogin', action.payload)
             state.persistLogin = JSON.parse(localStorage.getItem('persistLogin'))
         },

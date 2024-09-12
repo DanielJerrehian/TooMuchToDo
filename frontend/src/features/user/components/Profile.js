@@ -13,7 +13,6 @@ import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 
 import { getUser, fetchUser, setAlert, updateProfile, setProfileUpdated } from '../../user/userSlice';
-import AlertUser from '../../../components/alert/AlertUser';
 import DeleteProfileModal from './DeleteProfileModal';
 
 function Profile() {
@@ -27,7 +26,7 @@ function Profile() {
     const [validationError, setValidationError] = useState(false);
     const [modal, setModal] = useState(false);
 
-    useEffect(() => {  
+    useEffect(() => {
         for (const [key, value] of Object.entries(user?.user?.user)) {
             if (Object.keys(updatedProfile).includes(key)) {
                 if (updatedProfile[key] !== value && updatedProfile[key] !== '') {
@@ -35,7 +34,7 @@ function Profile() {
                 }
             }
         }
-    }, [updatedProfile, dispatch])
+    }, [updatedProfile, dispatch, user?.user?.user])
 
     const handleChange = (e) => {
         const { name, type, value, files } = e.target;
@@ -44,7 +43,7 @@ function Profile() {
                 ...prevState,
                 [name]: type === 'file'
                     ? files[0] ?
-                        files[0].size <= 2000000
+                        files[0].size <= 5000000
                             ? handleProfilePicture(files[0])
                             : handleProfilePictureTooLarge()
                         : user?.user?.user?.profilePicture
@@ -103,11 +102,7 @@ function Profile() {
     }, [dispatch, location])
 
     useEffect(() => {
-        profilePictureTooLarge && dispatch(setAlert({ alert: 'File too large, maximum file size of 2MB', severity: 'error' }))
-    }, [dispatch, profilePictureTooLarge])
-
-    useEffect(() => {
-        user?.alert && !profilePictureTooLarge && dispatch(setAlert(null))
+        profilePictureTooLarge && dispatch(setAlert({ alert: 'File too large, maximum file size of 5MB', severity: 'error' }))
     }, [dispatch, profilePictureTooLarge])
 
     return (
@@ -117,7 +112,7 @@ function Profile() {
                 component='div'
                 align='center'
                 gutterBottom
-                fontSize={mediaQuery ? '3.75rem' : '2.5rem'}
+                fontSize={mediaQuery ? '3rem' : '2rem'}
                 sx={{ marginBottom: 5 }}
             >
                 My Profile
@@ -125,7 +120,6 @@ function Profile() {
             <Card sx={{ boxShadow: 'rgba(0, 0, 0, 0.25) 0px 5px 15px' }}>
                 <CardContent>
                     <Stack direction='column' spacing={2}>
-                        { user?.alert && <AlertUser alert={user?.alert} /> }
                         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', marginBottom: 2 }}>
                             <Avatar
                                 src={
@@ -152,8 +146,8 @@ function Profile() {
                             <Typography variant='p' component='div' align='center' color='text.secondary'>
                                 {
                                     user?.user?.user?.profilePicture
-                                        ? 'Click to Update Profile Picture (Max 2MB)'
-                                        : 'Click to Upload Profile Picture (Max 2MB)'
+                                        ? 'Click to Update Profile Picture (Max 5MB)'
+                                        : 'Click to Upload Profile Picture (Max 5MB)'
                                 }
                             </Typography>
                         </Box>

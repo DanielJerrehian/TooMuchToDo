@@ -24,8 +24,8 @@ function Footer() {
             <Box
                 bgcolor={user?.darkMode ? '#121212' : '#aa00ff'}
                 color='white'
-                px={{ xs: 3, sm: 5 }}
-                py={{ xs: 3, sm: 5 }}
+                px={{ xs: 1, sm: 3 }}
+                py={{ xs: 1, sm: 3 }}
                 sx={{ backgroundImage: user?.darkMode ? 'linear-gradient(rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.09))' : null }}
             >
                 <Grid container spacing={5}>
@@ -125,7 +125,7 @@ function Footer() {
                 </Grid>
                 <Box
                     textAlign='center'
-                    pt={{ xs: 3, sm: 5 }}
+                    pt={{ xs: 1, sm: 3 }}
                     style={{
                         textDecoration: 'underline',
                         textDecorationColor: user?.darkMode ? '#aa00ff' : 'white',

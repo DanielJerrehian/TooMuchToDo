@@ -7,8 +7,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Checkbox from '@mui/material/Checkbox';
-import CircularProgress from '@mui/material/CircularProgress';
 import LinearProgress from '@mui/material/LinearProgress';
+import Spinner from '../../../components/spinner/Spinner';
 
 import ToDoTaskSecondaryText from './ToDoTaskSecondaryText';
 
@@ -26,16 +26,7 @@ function ToDoListDesktop(props) {
                     <DeleteIcon />
                     {
                         toDo?.updateAttribute === 'deleted' &&
-                        <CircularProgress
-                            size={24}
-                            sx={{
-                                position: 'absolute',
-                                top: '50%',
-                                left: '50%',
-                                marginTop: '-12px',
-                                marginLeft: '-12px',
-                            }}
-                        />
+                        <Spinner />
                     }
                 </IconButton>
             }

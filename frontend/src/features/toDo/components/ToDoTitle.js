@@ -6,13 +6,12 @@ function ToDoTitle() {
     const mediaQuery = useMediaQuery('(min-width:600px)');
 
     return (
-        <Typography 
-            variant='h1' 
-            component='div' 
+        <Typography
+            variant='h1'
+            component='div'
             align='center'
             gutterBottom
-            fontSize={mediaQuery ? '3.75rem' : '2.5rem'}
-            sx={{marginBottom: 5}}
+            fontSize={mediaQuery ? '3rem' : '2rem'}
         >
             My To-Do List
         </Typography>

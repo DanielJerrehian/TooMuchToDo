@@ -26,7 +26,7 @@ function Top(props) {
                         variant='h1'
                         component='div'
                         align='center'
-                        fontSize={mediaQuery ? '3.75rem' : '2.5rem'}
+                        fontSize={mediaQuery ? '3rem' : '2rem'}
                     >
                         The best results start with a plan
                     </ Typography>

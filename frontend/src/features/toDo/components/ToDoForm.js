@@ -56,6 +56,7 @@ function ToDoForm() {
                         value={newToDo.task}
                         onChange={handleChange}
                         error={validationError}
+                        autoComplete='off'
                         helperText={validationError ? "Empty To-Do" : null}
                     />
                     <LoadingButton

@@ -6,8 +6,9 @@ backend/htmlcov
 
 backend/*.pem
 backend/*.ppk
-
-backend/.coverage
-
-backend/*.pyc 
+*.pyc
+__pycache__/
+backend/*.pyc
 backend/__pycache__
+backend/.coverage
+*.DS_STORE

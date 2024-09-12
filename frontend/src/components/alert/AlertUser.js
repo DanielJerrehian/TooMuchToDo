@@ -1,24 +1,39 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useDispatch } from 'react-redux';
 import Alert from '@mui/material/Alert';
+import Box from '@mui/material/Box';
 
 import { setAlert } from '../../features/user/userSlice';
 
 
 function AlertUser(props) {
+    const { alert } = props;
+    console.log(alert)
     const dispatch = useDispatch();
-    const {alert} = props;
+
+    useEffect(() => {
+        if (alert) {
+            const timer = setTimeout(() => {
+                dispatch(setAlert(null));
+            }, 5000);
+
+            return () => clearTimeout(timer);
+        }
+    }, [alert, dispatch]);
 
     return (
-        <Alert
-            sx={{ marginBottom: 3 }}
-            severity={alert?.severity}
-            onClose={() => {
-                dispatch(setAlert(null));
-            }}
+        <Box
+            sx={{ marginTop: 3, marginLeft: 3, marginRight: 3 }}
         >
-            {alert?.alert}
-        </Alert>
+            <Alert
+                severity={alert?.severity}
+                onClose={() => {
+                    dispatch(setAlert(null));
+                }}
+            >
+                {alert?.alert}
+            </Alert>
+        </Box>
     )
 }
 

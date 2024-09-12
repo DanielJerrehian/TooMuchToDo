@@ -7,13 +7,13 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
-import CircularProgress from '@mui/material/CircularProgress';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
 import { getToDos, updateToDo, selectToDos } from '../toDoSlice';
 import { getUser } from '../../user/userSlice';
 import ToDoListDesktop from './ToDoListDesktop';
 import ToDoListMobile from './ToDoListMobile';
+import Spinner from '../../../components/spinner/Spinner';
 
 function ToDoList() {
     const dispatch = useDispatch();
@@ -45,7 +45,7 @@ function ToDoList() {
                     </Box>
                     : toDos?.status === 'idle' || user?.status === 'loading'
                         ? <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: 5 }}>
-                            <CircularProgress />
+                            <Spinner />
                         </Box>
                         : <Typography align='center' variant="h6" component="div" mt={2}>No To-Dos</Typography>
                 }

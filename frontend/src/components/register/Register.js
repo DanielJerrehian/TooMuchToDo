@@ -17,7 +17,6 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { getUser, registerUser, setShowPassword, setAlert, registrationValidationError } from '../../features/user/userSlice';
 import { getUtilities, setPrivacyModal } from '../../features/utilities/utilitiesSlice';
 import PrivacyPolicyModal from '../public/PrivacyPolicyModal';
-import AlertUser from '../alert/AlertUser';
 
 function Register() {
     const dispatch = useDispatch();
@@ -48,23 +47,28 @@ function Register() {
                 ? dispatch(registerUser(registrationData))
                     .unwrap()
                     .then(() => {
-                        navigate('/login')
                         dispatch(
                             setAlert({
-                                alert: 'User successfully created! Please confirm your E-Mail via the link sent to your inbox before logging in (it may have landed in your spam folder)', 
+                                alert: 'User successfully created! Please confirm your E-Mail via the link sent to your inbox before logging in',
                                 severity: 'success'
                             })
                         )
+                        navigate('/login')
                     })
                     .catch(err => {
-                        console.log(err)
+                        dispatch(
+                            setAlert({
+                                alert: err.message,
+                                severity: 'error'
+                            })
+                        )
                     })
-                    .finally(() => {
-                        setRegistrationData({ email: '', password: '', confirmPassword: '' })
-                    })
-                : dispatch(setAlert({alert: 'Passwords do not match', severity: 'error'}))
+                // .finally(() => {
+                //     setRegistrationData({ email: '', password: '', confirmPassword: '' })
+                // })
+                : dispatch(setAlert({ alert: 'Passwords do not match', severity: 'error' }))
         } else if (isEmail(registrationData?.email && registrationData?.password.length < 6)) {
-            dispatch(setAlert({alert: 'Password must be at least 6 characters', severity: 'error'}))
+            dispatch(setAlert({ alert: 'Password must be at least 6 characters', severity: 'error' }))
         }
     }
 
@@ -76,15 +80,14 @@ function Register() {
         (registrationData?.password || registrationData?.confirmPassword) && dispatch(registrationValidationError({ password: false }));
     }, [dispatch, registrationData?.password, registrationData?.confirmPassword])
 
-    useEffect(() => {
-        user?.alert && dispatch(setAlert(null));
-    }, [dispatch, location])
+    // useEffect(() => {
+    //     user?.alert && dispatch(setAlert(null));
+    // }, [dispatch, location, user?.alert])
 
     return (
         <Box sx={{ alignItems: 'center', justifyContent: 'center', marginTop: 5 }}>
             <Stack>
                 <Typography align='center' variant='h4' style={{ marginBottom: '1rem' }}>Sign Up</Typography>
-                { user?.alert && <AlertUser alert={user?.alert} /> }
                 <form>
                     <FormGroup>
                         <Stack spacing={2} >
