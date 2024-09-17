@@ -2,9 +2,9 @@ import axios from 'axios';
 
 import { refreshIdToken } from '../features/user/userSlice';
 
-const baseURL = 'http://127.0.0.1:7140'
+// const baseURL = 'http://127.0.0.1:7140'
 // const baseURL = 'http://54.74.182.174:7140/'
-// const baseURL = 'https://api.toomuchtodo.app/'
+const baseURL = 'https://toomuchtodobackend-febxffdeh5asbkea.westeurope-01.azurewebsites.net/'
 
 let store
 
