@@ -37,7 +37,7 @@ function ToDoMenuMobile(props) {
                 justifyContent='center'
             >
                 <FormControl
-                    sx={{ width: '100%' }}
+                    sx={{ width: '100%', zIndex: -1 }}
                     size="small"
                 >
                     <InputLabel id="filter-by">Filter By</InputLabel>
@@ -58,7 +58,7 @@ function ToDoMenuMobile(props) {
                 justifyContent='center'
             >
                 <FormControl
-                    sx={{ width: '100%' }}
+                    sx={{ width: '100%', zIndex: -1 }}
                     size="small"
                 >
                     <InputLabel id="sort-by">Sort By</InputLabel>

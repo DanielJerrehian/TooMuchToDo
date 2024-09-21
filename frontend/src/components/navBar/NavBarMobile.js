@@ -6,6 +6,7 @@ import Typography from '@mui/material/Typography';
 import MenuItem from '@mui/material/MenuItem';
 import TaskAltIcon from '@mui/icons-material/TaskAlt';
 import InfoIcon from '@mui/icons-material/Info';
+import Tooltip from '@mui/material/Tooltip';
 import SettingsIcon from '@mui/icons-material/Settings';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
@@ -48,13 +49,15 @@ function NavBarMobile(props) {
 
     return (
         <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
-            <IconButton
-                size="large"
-                onClick={handleOpen}
-                color="inherit"
-            >
-                <MenuIcon />
-            </IconButton>
+            <Tooltip title='Open Settings'>
+                <IconButton
+                    size="large"
+                    onClick={handleOpen}
+                    color="inherit"
+                >
+                    <MenuIcon />
+                </IconButton>
+            </Tooltip>
             {
                 user?.user?.idToken
                     ? (

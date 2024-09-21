@@ -28,9 +28,9 @@ function Footer() {
                 py={{ xs: 1, sm: 3 }}
                 sx={{ backgroundImage: user?.darkMode ? 'linear-gradient(rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.09))' : null }}
             >
-                <Grid container spacing={5}>
+                <Grid container spacing={3}>
                     <Grid item xs={12} lg={4}>
-                        <Stack spacing={1}>
+                        <Stack spacing={.5}>
                             <Box borderBottom={1} borderColor='white'>
                                 <Typography>
                                     Mission
@@ -52,7 +52,7 @@ function Footer() {
                         </ Stack>
                     </Grid>
                     <Grid item xs={12} lg={4}>
-                        <Stack spacing={1}>
+                        <Stack spacing={.5}>
                             <Box borderBottom={1} borderColor='white'>
                                 <Typography>
                                     Help
@@ -75,7 +75,7 @@ function Footer() {
                         </Stack>
                     </Grid>
                     <Grid item xs={12} lg={4}>
-                        <Stack spacing={1}>
+                        <Stack spacing={.5}>
                             <Box borderBottom={1} borderColor='white'>
                                 <Typography>
                                     Connect
@@ -125,7 +125,7 @@ function Footer() {
                 </Grid>
                 <Box
                     textAlign='center'
-                    pt={{ xs: 1, sm: 3 }}
+                    pt={1}
                     style={{
                         textDecoration: 'underline',
                         textDecorationColor: user?.darkMode ? '#aa00ff' : 'white',

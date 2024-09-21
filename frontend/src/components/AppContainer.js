@@ -18,7 +18,7 @@ function AppContainer() {
     return (
         <ThemeProvider theme={user?.darkMode ? darkModeTheme : lightModeTheme}>
             <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
-                <Box sx={{ flex: 1 }}>
+                <Box sx={{ flex: 1, marginBottom: 15 }}>
                     <CssBaseline />
                     <NavBar />
                     {user?.alert && <AlertUser alert={user?.alert} />}
